@@ -1,17 +1,6 @@
-import sys
-import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.datasets import make_regression
-from sklearn.preprocessing import StandardScaler
-
-df = pd.read_csv('data.csv')
-
-def viewData():
-	mileage = df['km'].tolist()
-	price = df['price'].tolist()
-	# plt.scatter(mileage, price, color = 'b')
-	# plt.show()
 
 def model(X, theta):
 	return X.dot(theta)
@@ -37,39 +26,44 @@ def coef_determination(y, pred):
 	return 1 - u / v
 
 def main():
-	if len(sys.argv) != 2:
-		print("Usage: python3 train.py <datafile>")
-		sys.exit(1)
-	# readData(sys.argv[1])
-
-	# Get the values from the dataset
-	x = df['km'].to_numpy()
-	y = df['price'].to_numpy()
-	# Standardize the data
-	scaler = StandardScaler()
-	x = scaler.fit_transform(x.reshape(-1, 1))
-	y = scaler.fit_transform(y.reshape(-1, 1))
-	# Reshape the arrays
-	x = x.reshape(x.shape[0], 1)
-	y = y.reshape(y.shape[0], 1)
+	# Create a random values dataset
+	x, y = make_regression(n_samples=100, n_features=1, noise=10)
 
 	# Display the dataset
 	plt.scatter(x,y)
 	plt.show()
 
-	# Add a bias to x array and store it in X matrix
-	X = np.hstack((x, np.ones(x.shape)))
+	# Print NumPy arrays and reshape y from (100) to (100, 1)
+	print(x.shape)
+	y = y.reshape(y.shape[0], 1)
+	print(y.shape)
 
-	theta, cost_history = gradient_descent(X, y, np.zeros((2,1)), 0.01, 1000)
+	# Add a bias column to x and store it in the design matrix X
+	X = np.hstack((x, np.ones(x.shape)))
+	print(X.shape)
+
+	# Random initialization of Theta
+	theta = np.random.randn(2, 1)
+	print(theta)
+	
+	# Model verification by displaying a linear regression line
+	plt.scatter(x,y)
+	plt.plot(x, model(X, theta), c='r')
+	plt.show()
+
+	# Gradient descent calculation with cost history
+	theta_final, cost_history = gradient_descent(X, y, theta, learning_rate=0.01, n_iterations=1000)
+	# Display the cost function curve depending on the number of iterations (here 1000)
 	plt.plot(range(1000), cost_history)
 	plt.show()
 
 	# Display the new model
-	predictions = model(X, theta)
+	predictions = model(X, theta_final)
 	plt.scatter(x, y)
 	plt.plot(x, predictions, c='r')
 	plt.show()
 
+	# Display the rate of the model's accuracy
 	print(coef_determination(y, predictions))
 
 if __name__ == "__main__":
