@@ -72,5 +72,13 @@ def main():
 
 	print(coef_determination(y, predictions))
 
+	f = open("metrics.txt", "w")
+	f.write(f"n = {len(x)}\n")
+	f.write(f"p = {1}\n")
+	f.write(f"y_true = {np.array(y)}\n")
+	f.write(f"y_pred = {np.array(predictions)}\n")
+	f.write(f"y_mean = {np.mean(y)}\n")
+	f.close()
+
 if __name__ == "__main__":
 	main()
