@@ -1,12 +1,5 @@
-from metrics import *
 import os.path, sys
 import numpy as np
-
-# n      = number of samples
-# p      = number of features
-# y_true = true value (ground truth)
-# y_pred = predicted value
-# y_mean = mean of true values
 
 def mean_absolute_error(y_true, y_pred):
 	# Formula: (1 / n) * sum(abs(y_true - y_pred))
@@ -35,16 +28,21 @@ def explained_variance_score(y_true, y_pred):
 	return 1 - (np.var(y_true - y_pred) / np.var(y_true))
 
 def main():
-	if os.path.isfile("metrics.py") == False:
+	if os.path.isfile("metrics.txt") == False:
 		print("Metrics file not found. Please run the 'train.py' file.")
 		sys.exit(1)
 
-	mae = mean_absolute_error(y_true, y_pred)
-	mse = mean_squared_error(y_true, y_pred)
-	rmse = root_mean_squared_error(y_true, y_pred)
-	r2 = r_squared(y_true, y_pred, np.mean(y_true))
-	ar2 = adjusted_r_squared(n, p, y_true, y_pred, np.mean(y_true))
-	evs = explained_variance_score(y_true, y_pred)
+	with open("metrics.txt", "r") as file:
+		lines = file.readlines()
+	theta0 = float(lines[0].split("=")[1].strip())
+	theta1 = float(lines[1].split("=")[1].strip())
+
+	mae = mean_absolute_error(theta0, theta1)
+	mse = mean_squared_error(theta0, theta1)
+	rmse = root_mean_squared_error(theta0, theta1)
+	r2 = r_squared(theta0, theta1)
+	ar2 = adjusted_r_squared(theta0, theta1)
+	evs = explained_variance_score(theta0, theta1)
 
 	print(f"Mean Absolute Error:            {mae}")
 	print(f"Mean Squared Error:             {mse}")

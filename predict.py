@@ -1,6 +1,5 @@
 def estimatePrice(mileage):
 	theta0, theta1 = 0, 0
-	# training program
 	estimatedPrice = theta0 + (theta1 * mileage)
 	print(estimatedPrice)
 
