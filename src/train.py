@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 df = pd.read_csv('./data/data.csv')
+pred_df = pd.read_csv('./data/pred_data.csv')
 
 def model(X, theta0, theta1) -> list:
 	"""
@@ -64,6 +65,17 @@ def gradient_descent(X, y, theta0, theta1, alpha, iterations) -> tuple:
 		cost_history[i] = cost_function(X, y, theta0, theta1)
 	return theta0, theta1, cost_history
 
+def get_data():
+	"""
+	Get x and y values from the dataset.
+	:param x: features.
+	:param y: true values.
+	:return: x and y.
+	"""
+	x = df['km'].to_numpy()
+	y = df['price'].to_numpy()
+	return x, y
+
 def normalize_data(x, y):
 	"""
 	Normalizes the x and y values using the min-max normalization.
@@ -75,43 +87,48 @@ def normalize_data(x, y):
 	y_norm = (y - y.min()) / (y.max() - y.min())
 	return x_norm, y_norm
 
+def denormalize_thetas(x, y, theta0, theta1):
+	"""
+	Denormalizes the two thetas.
+	:param x: features.
+	:param y: true values.
+	:param theta0: intercept of the line.
+	:param theta1: slope of the line.
+	:return: the two denormalized thetas.
+	"""
+	theta1_denorm = theta1 * (y.max() - y.min()) / (x.max() - x.min())
+	theta0_denorm = theta0 * (y.max() - y.min()) + y.min() - theta1_denorm * x.min()
+	return theta0_denorm, theta1_denorm
+
+def save_thetas(theta0, theta1):
+	with open("metrics.txt", "w") as file:
+		file.write(f"theta0 = {theta0}\n")
+		file.write(f"theta1 = {theta1}\n")
+	pred_df['predictedPrice'] = df['km'].apply(lambda x: round(theta0 + theta1 * x))
+	pred_df.to_csv('./data/pred_data.csv', index=False)
+
 def train():
 	"""
 	Trains the model using the gradient descent algorithm.
 	:param: none.
 	:return: none.
 	"""
-	# Get the values from the dataset
-	x = df['km'].to_numpy()
-	y = df['price'].to_numpy()
+	x, y = get_data()
 
-	# Normalize the data
 	x_norm, y_norm = normalize_data(x, y)
 
-	# Gradient descent
 	theta0, theta1, cost_history = gradient_descent(x_norm, y_norm, 0, 0, 0.1, 1000)
 	plt.plot(range(1000), cost_history)
 	plt.show()
 
-	# Denormalize thetas
-	theta1_prime = theta1 * (y.max() - y.min()) / (x.max() - x.min())
-	theta0_prime = theta0 * (y.max() - y.min()) + y.min() - theta1_prime * x.min()
+	theta0_denorm, theta1_denorm = denormalize_thetas(x, y, theta0, theta1)
 
-	# Display the new model
-	predictions = model(x, theta0_prime, theta1_prime)
+	predictions = model(x, theta0_denorm, theta1_denorm)
 	plt.scatter(x, y)
 	plt.plot(x, predictions, color='red')
 	plt.show()
 
-	# Save thetas in a file
-	with open("metrics.txt", "w") as file:
-		file.write(f"theta0 = {theta0_prime}\n")
-		file.write(f"theta1 = {theta1_prime}\n")
-
-	df2 = pd.read_csv('./data/predicted_data.csv')
-
-	df2['predictedPrice'] = df['km'].apply(lambda x: round(theta0_prime + theta1_prime * x))
-	df2.to_csv('./data/predicted_data.csv', index=False)
+	save_thetas(theta0_denorm, theta1_denorm)
 
 def main():
 	if len(sys.argv) != 2:
