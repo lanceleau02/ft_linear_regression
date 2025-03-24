@@ -3,9 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-df = pd.read_csv('./data/data.csv')
-pred_df = pd.read_csv('./data/pred_data.csv')
-
 def model(X, theta0, theta1) -> list:
 	"""
 	Calculates the predicted values (y_pred) from the features (X).
@@ -65,13 +62,14 @@ def gradient_descent(X, y, theta0, theta1, alpha, iterations) -> tuple:
 		cost_history[i] = cost_function(X, y, theta0, theta1)
 	return theta0, theta1, cost_history
 
-def get_data():
+def get_data(datafile):
 	"""
-	Get x and y values from the dataset.
-	:param x: features.
-	:param y: true values.
+	Get x (features) and y (true values) values from the dataset.
+	:param datafile: the datafile.
 	:return: x and y.
 	"""
+	global df
+	df = pd.read_csv(datafile)
 	x = df['km'].to_numpy()
 	y = df['price'].to_numpy()
 	return x, y
@@ -101,19 +99,23 @@ def denormalize_thetas(x, y, theta0, theta1):
 	return theta0_denorm, theta1_denorm
 
 def save_thetas(theta0, theta1):
+	"""
+	Save the two thetas in a file.
+	:param theta0: intercept of the line.
+	:param theta1: slope of the line.
+	:return: none.
+	"""
 	with open("metrics.txt", "w") as file:
 		file.write(f"theta0 = {theta0}\n")
 		file.write(f"theta1 = {theta1}\n")
-	pred_df['predictedPrice'] = df['km'].apply(lambda x: round(theta0 + theta1 * x))
-	pred_df.to_csv('./data/pred_data.csv', index=False)
 
-def train():
+def train(datafile):
 	"""
 	Trains the model using the gradient descent algorithm.
-	:param: none.
+	:param datafile: the datafile.
 	:return: none.
 	"""
-	x, y = get_data()
+	x, y = get_data(datafile)
 
 	x_norm, y_norm = normalize_data(x, y)
 
@@ -134,7 +136,7 @@ def main():
 	if len(sys.argv) != 2:
 		print("Usage: python3 train.py <datafile>")
 		sys.exit(1)
-	train()
+	train(sys.argv[1])
 
 if __name__ == "__main__":
 	main()
