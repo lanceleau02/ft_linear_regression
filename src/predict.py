@@ -1,8 +1,13 @@
 from src.train import train
 
 def estimatePrice(mileage):
+	"""
+	Estimate the price depending on the car's mileage.
+	:param mileage: the car's mileage.
+	:return: none.
+	"""
 	theta0, theta1 = 0, 0
-	train()
+	train("./data/data.csv")
 	with open("metrics.txt", "r") as file:
 		lines = file.readlines()
 	theta0 = float(lines[0].split("=")[1].strip())

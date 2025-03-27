@@ -79,7 +79,7 @@ def main():
 		print("Metrics file not found. Please run the 'train.py' file.")
 		sys.exit(1)
 
-	df = pd.read_csv('./data/pred_data.csv')
+	df = pd.read_csv('./data/predicted_data.csv')
 	y_true = df['price'].to_numpy()
 	y_pred = df['predictedPrice'].to_numpy()
 

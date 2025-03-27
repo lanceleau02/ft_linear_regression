@@ -100,7 +100,7 @@ def denormalize_thetas(x, y, theta0, theta1):
 
 def save_thetas(theta0, theta1):
 	"""
-	Save the two thetas in a file.
+	Save the two thetas in a .txt file.
 	:param theta0: intercept of the line.
 	:param theta1: slope of the line.
 	:return: none.
@@ -108,6 +108,17 @@ def save_thetas(theta0, theta1):
 	with open("metrics.txt", "w") as file:
 		file.write(f"theta0 = {theta0}\n")
 		file.write(f"theta1 = {theta1}\n")
+
+def save_predicted_price(theta0, theta1):
+	""" 
+	Save the predicted price for each mileage in a .csv file.
+	:param theta0: intercept of the line.
+	:param theta1: slope of the line.
+	:return: none.
+	"""
+	df2 = pd.read_csv('./data/predicted_data.csv')
+	df2['predictedPrice'] = df['km'].apply(lambda x: round(theta0 + theta1 * x))
+	df2.to_csv('./data/predicted_data.csv', index=False)
 
 def train(datafile):
 	"""
@@ -119,7 +130,7 @@ def train(datafile):
 
 	x_norm, y_norm = normalize_data(x, y)
 
-	theta0, theta1, cost_history = gradient_descent(x_norm, y_norm, 0, 0, 0.1, 1000)
+	theta0, theta1, cost_history = gradient_descent(x_norm, y_norm, 0, 0, 0.08, 1000)
 	plt.plot(range(1000), cost_history)
 	plt.show()
 
@@ -131,12 +142,10 @@ def train(datafile):
 	plt.show()
 
 	save_thetas(theta0_denorm, theta1_denorm)
+	save_predicted_price(theta0_denorm, theta1_denorm)
 
 def main():
-	if len(sys.argv) != 2:
-		print("Usage: python3 train.py <datafile>")
-		sys.exit(1)
-	train(sys.argv[1])
+	train("./data/data.csv")
 
 if __name__ == "__main__":
 	main()
