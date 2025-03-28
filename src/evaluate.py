@@ -1,6 +1,4 @@
-import os.path, sys
-import numpy as np
-import pandas as pd
+from src import os, sys, np, pd
 
 def mean_absolute_error(y_true, y_pred):
 	"""
@@ -74,11 +72,12 @@ def explained_variance_score(y_true, y_pred):
 	"""
 	return 1 - (np.var(y_true - y_pred) / np.var(y_true))
 
-def main():
-	if os.path.isfile("metrics.txt") == False:
-		print("Metrics file not found. Please run the 'train.py' file.")
-		sys.exit(1)
-
+def evaluate():
+	"""
+	Evaluate the model's performance thanks to different formulas.
+	:param: none.
+	:return: none.
+	"""
 	df = pd.read_csv('./data/predicted_data.csv')
 	y_true = df['price'].to_numpy()
 	y_pred = df['predictedPrice'].to_numpy()
@@ -90,6 +89,12 @@ def main():
 	print("R-squared:                      {:.2f}".format(r_squared(y_true, y_pred)))
 	print("Adjusted R-squared:             {:.2f}".format(adjusted_r_squared(y_true, y_pred)))
 	print("Explained Variance Score:       {:.2f}".format(explained_variance_score(y_true, y_pred)))
+
+def main():
+	if os.path.isfile("./data/metrics.txt") == False:
+		print("Metrics file not found. Please run the 'train.py' file.")
+		sys.exit(1)
+	evaluate()
 
 if __name__ == "__main__":
 	main()

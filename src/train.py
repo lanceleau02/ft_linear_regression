@@ -1,7 +1,4 @@
-import sys
-import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
+from src import np, pd, plt
 
 def model(X, theta0, theta1) -> list:
 	"""
@@ -105,7 +102,7 @@ def save_thetas(theta0, theta1):
 	:param theta1: slope of the line.
 	:return: none.
 	"""
-	with open("metrics.txt", "w") as file:
+	with open("./data/metrics.txt", "w") as file:
 		file.write(f"theta0 = {theta0}\n")
 		file.write(f"theta1 = {theta1}\n")
 
