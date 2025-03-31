@@ -264,9 +264,9 @@ Matrix notation simplifies calculations, enables more complex models like polyno
 - **Input data:** $X$, $Y$, where $X$ is a matrix of size $m \times (n+1)$ with a column of ones (bias).  
 - **Linear model:**  
 
-  $$ f(X) = X\Theta $$  
+$$ f(X) = X\Theta $$  
 
-  where $\Theta$ is a vector containing the parameters (a and b for a linear model).  
+where $\Theta$ is a vector containing the parameters (a and b for a linear model).  
 
 #### **2. Cost Function in Matrix Form**  
 - The cost function is a **scalar**, expressed as:  
