@@ -98,9 +98,7 @@ This project is all about supervised learning. Here are the 4 steps to a success
 
 Where the **Price** column represents the **Target (y)** and the **Surface**, **Quality** and **Zip Code** columns represent the **Features (x<sub>1</sub>, x<sub>2</sub>, x<sub>3</sub>)**.
 
-By convention, we note **m (number of examples)** and **n (number of features)** so: 
-
-$$ x^{m}_{n} = x^{\text{examples}}_{\text{features}} $$
+By convention, we note **m (number of examples)** and **n (number of features)**.
 
 #### 2. The concept of Model
 
