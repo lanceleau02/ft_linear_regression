@@ -100,7 +100,7 @@ Where the **Price** column represents the **Target (y)** and the **Surface**, **
 
 By convention, we note **m (number of examples)** and **n (number of features)** so: 
 
-$$ x^{m}_{n} = x^{examples}_{features} $$
+$$ x^{m}_{n} = x^{\text{examples}}_{\text{features}} $$
 
 #### 2. The concept of Model
 
