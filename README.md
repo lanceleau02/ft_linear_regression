@@ -157,11 +157,8 @@ $$
 
 1. **Least Squares Method** (Normal Equations):
     - Finds the optimal solution directly by setting the derivative to zero.
-    - Seeks the point $a$ where the tangent to $J$ is horizontal (zero slope), where the derivative becomes zero:
-
-$$ \frac{\partial J}{\partial a} = 0 $$
-
-  - Fast for small datasets but computationally expensive for large ones.
+    - Seeks the point $a$ where the tangent to $J$ is horizontal (zero slope), where the derivative becomes zero: $ \frac{\partial J}{\partial a} = 0 $
+    - Fast for small datasets but computationally expensive for large ones.
 2. **Gradient Descent**:
     - Starts with a random initial point.
     - Calculates the slope (derivative of the cost function).
