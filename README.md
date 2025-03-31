@@ -75,7 +75,7 @@ This project is all about supervised learning. Here are the 4 steps to a success
 
 - A **dataset** always contains two types of variable:
     - **Target variable (y)**: what the machine must predict (e.g. apartment price, spam detection).
-    - **Features (x1, x2, x3, ...)**: factors influencing **y** (e.g. apartment surface, quality, address).
+    - **Features ($x_1$, $x_2$, $x_3$, ...)**: factors influencing **y** (e.g. apartment surface, quality, address).
 - Notations :
     - **m** = number of **examples** (dataset rows).
     - **n** = number of **features** (dataset columns, excluding y).
@@ -101,7 +101,7 @@ Where the **Price** column represents the **Target (y)** and the **Surface**, **
 By convention, we note **m (number of examples)** and **n (number of features)** so: 
 
 $$
-x^{\text{m}}_{\text{n}} = x^{\text{examples}}_{\text{features}}
+x^{m}_{n} = x^{examples}_{features}
 $$
 
 #### 2. The concept of Model
