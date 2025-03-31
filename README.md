@@ -266,7 +266,7 @@ Matrix notation simplifies calculations, enables more complex models like polyno
 
 $$ f(X) = X\Theta $$  
 
-where $\Theta$ is a vector containing the parameters (a and b for a linear model).  
+  where $\Theta$ is a vector containing the parameters (a and b for a linear model).  
 
 #### **2. Cost Function in Matrix Form**  
 - The cost function is a **scalar**, expressed as:  
