@@ -161,7 +161,7 @@ $$
 
 $$ \frac{\partial J}{\partial a} = 0 $$
 
-    - Fast for small datasets but computationally expensive for large ones.
+  - Fast for small datasets but computationally expensive for large ones.
 2. **Gradient Descent**:
     - Starts with a random initial point.
     - Calculates the slope (derivative of the cost function).
