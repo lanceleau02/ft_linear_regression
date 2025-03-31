@@ -266,25 +266,25 @@ Matrix notation simplifies calculations, enables more complex models like polyno
 
 $$ f(X) = X\Theta $$  
 
-  where $\Theta$ is a vector containing the parameters (a and b for a linear model).  
+where $\Theta$ is a vector containing the parameters (a and b for a linear model).  
 
 #### **2. Cost Function in Matrix Form**  
 - The cost function is a **scalar**, expressed as:  
 
-  $$ J(\Theta) = \frac{1}{2m} \sum (X\Theta - Y)^2 $$  
+$$ J(\Theta) = \frac{1}{2m} \sum (X\Theta - Y)^2 $$  
 
 - All errors are grouped into a vector, and the squared sum is computed.  
 
 #### **3. Gradient Descent in Matrix Form**  
 - The parameter update algorithm is given by:  
 
-  $$ \frac{\partial J (\Theta)}{\partial \Theta} = \frac{1}{m}X^T(X\Theta - Y) $$  
+$$ \frac{\partial J (\Theta)}{\partial \Theta} = \frac{1}{m}X^T(X\Theta - Y) $$  
 
 - $X^T$ ensures matrix dimensions align, generalizing gradient calculations.  
 
 - The **parameter update rule** in gradient descent is:  
 
-  $$ \Theta = \Theta - \alpha \frac{\partial J}{\partial \Theta} $$  
+$$ \Theta = \Theta - \alpha \frac{\partial J}{\partial \Theta} $$  
 
   where:  
   - **$\Theta$** is the parameter vector (e.g., $a$ and $b$).  
@@ -295,7 +295,7 @@ $$ f(X) = X\Theta $$
 - For a quadratic model $f(x) = ax^2 + bx + c$, we construct a matrix $X$ containing **$x^2, x$, and 1**.  
 - The **same matrix formula applies**:  
 
-  $$ f = X\Theta $$  
+$$ f = X\Theta $$  
 
 - This allows using the same algorithm for more complex models.
 
