@@ -4,14 +4,15 @@ def estimatePrice(mileage: float):
 	"""
 	Estimate the price depending on the car's mileage.
 	:param mileage: the car's mileage.
-	:return: none.
+	:return: estimated price of the car.
 	"""
-	theta0, theta1 = 0, 0
-	train("./data/data.csv")
-	with open("./data/metrics.txt", "r") as file:
-		lines = file.readlines()
-	theta0 = float(lines[0].split("=")[1].strip())
-	theta1 = float(lines[1].split("=")[1].strip())
+	try:
+		with open("./data/metrics.txt", "r") as file:
+			lines = file.readlines()
+		theta0 = float(lines[0].split("=")[1].strip())
+		theta1 = float(lines[1].split("=")[1].strip())
+	except (FileNotFoundError, ValueError, IndexError):
+		theta0, theta1 = 0.0, 0.0
 	estimatedPrice = theta0 + (theta1 * mileage)
 	return estimatedPrice
 

@@ -26,7 +26,7 @@ def mean_squared_percentage_error(y_true, y_pred):
 	:param y_true: true values.
 	:param y_pred: predicted values.
 	:return: the Mean Squared Percentage Error (MSPE).
-	:formula: MAPE = (1 / n) * sum(abs((y_true - y_pred) / y_true) * 100)
+	:formula: MSPE = (1 / n) * sum(abs((y_true - y_pred) / y_true) * 100)
 	"""
 	return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
 
