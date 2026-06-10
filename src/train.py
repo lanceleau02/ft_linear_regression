@@ -1,5 +1,9 @@
-import sys, os
-from src import np, pd, plt
+import sys
+import os
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 
 METRICS_FILE = "./data/metrics.txt"
 PREDICTED_DATA_FILE = "./data/predicted_data.csv"
@@ -116,9 +120,6 @@ def save_predicted_price(theta0, theta1, df):
 	:param theta1: slope of the line.
 	:return: none.
 	"""
-	if not os.path.exists(PREDICTED_DATA_FILE):
-		print(f'Error: Predicted datafile ({PREDICTED_DATA_FILE}) does not exist.')
-		sys.exit()
 	df_out = df[['km', 'price']].copy()
 	df_out['predictedPrice'] = df['km'].apply(lambda x: round(theta0 + theta1 * x))
 	df_out.to_csv(PREDICTED_DATA_FILE, index=False)

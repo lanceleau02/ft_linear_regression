@@ -1,5 +1,11 @@
-from src import os, sys, np, pd
-from src.train import METRICS_FILE, PREDICTED_DATA_FILE
+import sys
+import os
+
+import numpy as np
+import pandas as pd
+
+METRICS_FILE = "./data/metrics.txt"
+PREDICTED_DATA_FILE = "./data/predicted_data.csv"
 
 def mean_absolute_error(y_true, y_pred):
 	"""

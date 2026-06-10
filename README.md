@@ -33,7 +33,7 @@ pip install -r requirements.txt
 You first need to run the `train` program:
 
 ```bash
-python3 -m src.train
+python3 -m src.train <datafile> <learning_rate> <iterations>
 ```
 
 Then, you can run the `predict` and `evaluate` programs:

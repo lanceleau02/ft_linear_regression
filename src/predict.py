@@ -1,4 +1,5 @@
-from src.train import METRICS_FILE
+METRICS_FILE = "./data/metrics.txt"
+PREDICTED_DATA_FILE = "./data/predicted_data.csv"
 
 def load_thetas():
 	try:
