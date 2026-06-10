@@ -1,4 +1,5 @@
 from src import os, sys, np, pd
+from src.train import METRICS_FILE, PREDICTED_DATA_FILE
 
 def mean_absolute_error(y_true, y_pred):
 	"""
@@ -15,7 +16,7 @@ def mean_squared_error(y_true, y_pred):
 	Calculates the Mean Squared Error (MSE).
 	:param y_true: true values.
 	:param y_pred: predicted values.
-	:return: the Mean Squared Error (MAE).
+	:return: the Mean Squared Error (MSE).
 	:formula: MSE = (1 / n) * sum((y_true - y_pred) ** 2)
 	"""
 	return np.mean((y_true - y_pred) ** 2)
@@ -52,7 +53,7 @@ def r_squared(y_true, y_pred):
 	v = np.sum((y_true - np.mean(y_true)) ** 2)
 	return 1 - (u / v)
 
-def adjusted_r_squared(y_true, y_pred):
+def adjusted_r_squared(y_true, y_pred, p=1):
 	"""
 	Calculates the Adjusted R-squared (R^2).
 	:param y_true: true values.
@@ -60,7 +61,8 @@ def adjusted_r_squared(y_true, y_pred):
 	:return: the Adjusted R-squared (R^2).
 	:formula: Adjusted R^2 = 1 - (1 - R^2) * ((n - 1) / (n - p - 1))
 	"""
-	return 1 - (1 - r_squared(y_true, y_pred)) * ((len(y_true) - 1) / (len(y_true) - 1 - 1))
+	n = len(y_true)
+	return 1 - (1 - r_squared(y_true, y_pred)) * ((n - 1) / (n - p - 1))
 
 def explained_variance_score(y_true, y_pred):
 	"""
@@ -78,7 +80,13 @@ def evaluate():
 	:param: none.
 	:return: none.
 	"""
-	df = pd.read_csv('./data/predicted_data.csv')
+	if not os.path.isfile(METRICS_FILE):
+		print("Metrics file not found. Please run the 'train.py' file.")
+		sys.exit(1)
+	if not os.path.isfile(PREDICTED_DATA_FILE):
+		print("Predicted data file not found. Please run the 'train.py' file.")
+		sys.exit(1)
+	df = pd.read_csv(PREDICTED_DATA_FILE)
 	y_true = df['price'].to_numpy()
 	y_pred = df['predictedPrice'].to_numpy()
 
@@ -91,9 +99,6 @@ def evaluate():
 	print("Explained Variance Score:       {:.2f}".format(explained_variance_score(y_true, y_pred)))
 
 def main():
-	if os.path.isfile("./data/metrics.txt") == False:
-		print("Metrics file not found. Please run the 'train.py' file.")
-		sys.exit(1)
 	evaluate()
 
 if __name__ == "__main__":
