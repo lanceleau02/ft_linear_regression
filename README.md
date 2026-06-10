@@ -219,18 +219,24 @@ The `train` function coordinates the entire process: it loads the data, normaliz
 
 ```python
 def train(datafile):
-    x, y = get_data(datafile)
+    x, y, df = get_data(datafile)
     x_norm, y_norm = normalize_data(x, y)
-    theta0, theta1, cost_history = gradient_descent(x_norm, y_norm, 0, 0, 0.08, 1000)
-    plt.plot(range(1000), cost_history)
-    plt.show()
+    theta0, theta1, cost_history = gradient_descent(x_norm, y_norm, 0, 0, alpha, iterations)
     theta0_denorm, theta1_denorm = denormalize_thetas(x, y, theta0, theta1)
-    predictions = model(x, theta0_denorm, theta1_denorm)
-    plt.scatter(x, y)
-    plt.plot(x, predictions, color='red')
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+    ax1.plot(range(iterations), cost_history)
+    ax1.set_title("Cost history")
+    ax1.set_xlabel("Iterations")
+    ax1.set_ylabel("Cost")
+    ax2.set_xlabel("Mileage (km)")
+    ax2.set_ylabel("Price")
+    ax2.scatter(x, y, label="Data")
+    ax2.plot(x, model(x, theta0_denorm, theta1_denorm), color='red', label="Regression")
+    ax2.legend()
+    plt.tight_layout()
     plt.show()
     save_thetas(theta0_denorm, theta1_denorm)
-    save_predicted_price(theta0_denorm, theta1_denorm)
+    save_predicted_price(theta0_denorm, theta1_denorm, df)
 ```
 
 ## License
