@@ -1,6 +1,10 @@
+import sys, os
 from src import np, pd, plt
 
-def model(X, theta0, theta1) -> list:
+METRICS_FILE = "./data/metrics.txt"
+PREDICTED_DATA_FILE = "./data/predicted_data.csv"
+
+def model(X, theta0, theta1) -> np.ndarray:
 	"""
 	Calculates the predicted values (y_pred) from the features (X).
 	:param X: features.
@@ -11,7 +15,7 @@ def model(X, theta0, theta1) -> list:
 	"""
 	return theta0 + (theta1 * X)
 
-def cost_function(X, y, theta0, theta1) -> list:
+def cost_function(X, y, theta0, theta1) -> float:
 	"""
 	Measures model's errors by comparing predicted values (y_pred) with true values (y).
 	:param X: features.
@@ -65,11 +69,10 @@ def get_data(datafile):
 	:param datafile: the datafile.
 	:return: x and y.
 	"""
-	global df
 	df = pd.read_csv(datafile)
 	x = df['km'].to_numpy()
 	y = df['price'].to_numpy()
-	return x, y
+	return x, y, df
 
 def normalize_data(x, y):
 	"""
@@ -102,47 +105,72 @@ def save_thetas(theta0, theta1):
 	:param theta1: slope of the line.
 	:return: none.
 	"""
-	with open("./data/metrics.txt", "w") as file:
+	with open(METRICS_FILE, "w") as file:
 		file.write(f"theta0 = {theta0}\n")
 		file.write(f"theta1 = {theta1}\n")
 
-def save_predicted_price(theta0, theta1):
+def save_predicted_price(theta0, theta1, df):
 	""" 
 	Save the predicted price for each mileage in a .csv file.
 	:param theta0: intercept of the line.
 	:param theta1: slope of the line.
 	:return: none.
 	"""
-	df2 = pd.read_csv('./data/predicted_data.csv')
-	df2['predictedPrice'] = df['km'].apply(lambda x: round(theta0 + theta1 * x))
-	df2.to_csv('./data/predicted_data.csv', index=False)
+	if not os.path.exists(PREDICTED_DATA_FILE):
+		print(f'Error: Predicted datafile ({PREDICTED_DATA_FILE}) does not exist.')
+		sys.exit()
+	df_out = df[['km', 'price']].copy()
+	df_out['predictedPrice'] = df['km'].apply(lambda x: round(theta0 + theta1 * x))
+	df_out.to_csv(PREDICTED_DATA_FILE, index=False)
 
-def train(datafile):
+def train(datafile, alpha, iterations):
 	"""
 	Trains the model using the gradient descent algorithm.
 	:param datafile: the datafile.
 	:return: none.
 	"""
-	x, y = get_data(datafile)
+	x, y, df = get_data(datafile)
 
 	x_norm, y_norm = normalize_data(x, y)
 
-	theta0, theta1, cost_history = gradient_descent(x_norm, y_norm, 0, 0, 0.08, 1000)
-	plt.plot(range(1000), cost_history)
-	plt.show()
+	theta0, theta1, cost_history = gradient_descent(x_norm, y_norm, 0, 0, alpha, iterations)
 
 	theta0_denorm, theta1_denorm = denormalize_thetas(x, y, theta0, theta1)
 
-	predictions = model(x, theta0_denorm, theta1_denorm)
-	plt.scatter(x, y)
-	plt.plot(x, predictions, color='red')
+	fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+	ax1.plot(range(iterations), cost_history)
+	ax1.set_title("Cost history")
+	ax1.set_xlabel("Iterations")
+	ax1.set_ylabel("Cost")
+	ax2.set_xlabel("Mileage (km)")
+	ax2.set_ylabel("Price")
+	ax2.scatter(x, y, label="Data")
+	ax2.plot(x, model(x, theta0_denorm, theta1_denorm), color='red', label="Regression")
+	ax2.legend()
+	plt.tight_layout()
 	plt.show()
 
 	save_thetas(theta0_denorm, theta1_denorm)
-	save_predicted_price(theta0_denorm, theta1_denorm)
+	save_predicted_price(theta0_denorm, theta1_denorm, df)
 
 def main():
-	train("./data/data.csv")
+	if len(sys.argv) != 4:
+		print('Usage: train.py <datafile> <learning_rate> <iterations>')
+		sys.exit()
+	try:
+		datafile = sys.argv[1]
+		alpha = float(sys.argv[2])
+		iterations = int(sys.argv[3])
+		if alpha <= 0 or iterations <= 0:
+			print('Invalid arguments. Learning rate and iterations must be positive.')
+			sys.exit()
+		if not os.path.exists(datafile):
+			print('Invalid arguments. Datafile does not exist.')
+			sys.exit()
+	except ValueError:
+		print('Invalid arguments. Please provide a valid learning rate and number of iterations.')
+		sys.exit()
+	train(datafile, alpha, iterations)
 
 if __name__ == "__main__":
 	main()
